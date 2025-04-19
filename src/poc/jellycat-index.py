@@ -31,6 +31,14 @@ class Jellycat:
         return self._raw["name"]
 
     @property
+    def id(self) -> str:
+        return self._raw["id"]
+
+    @property
+    def uid(self) -> int:
+        return int(self._raw["uid"])
+
+    @property
     def slug(self) -> str:
         relative_url = self._raw["url"]
         assert isinstance(relative_url, str)
@@ -79,7 +87,7 @@ class Jellycat:
         return available_datetime.date()
 
     def __repr__(self):
-        return f"Jellycat(name={self.name})"
+        return f"Jellycat(name={self.name!r}, slug={self.slug!r})"
 
 
 async def fetch_page_of_jellycats(session: aiohttp.ClientSession, page_number: int) -> Page[Jellycat]:
@@ -124,7 +132,7 @@ __all__ = (
 async def main():
     async with aiohttp.ClientSession() as session:
         async for jellycat in fetch_all_jellycats(session):
-            print(jellycat.available_date)
+            print(jellycat)
 
 
 if __name__ == "__main__":
