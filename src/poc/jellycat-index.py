@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+from enum import StrEnum
 from typing import AsyncGenerator
 
 import aiohttp
@@ -11,6 +12,12 @@ from utils.page import Page, PageMeta
 
 jellycat_site_url = URL("https://jellycat.com/shop-all")
 jellycat_search_url = URL("https://d3slzq.a.searchspring.io/api/search/search.json?siteId=d3slzq&resultsFormat=native&page=1&domain=https%3A%2F%2Fjellycat.com%2Fshop-all")
+
+
+class ProductStatus(StrEnum):
+    Live = "Live"
+    OutOfStock = "Out of Stock"
+    ComingSoon = "Coming Soon"
 
 
 class Jellycat:
@@ -48,6 +55,17 @@ class Jellycat:
     @property
     def in_stock(self) -> bool:
         return self._raw["ss_in_stock"] == "1"
+
+    @property
+    def is_retired(self) -> bool:
+        return self._raw["ss_is_retired"] == "1"
+
+    @property
+    def product_status(self) -> ProductStatus:
+        raw_product_status = self._raw.get("ss_product_status", None)
+        if raw_product_status is None:
+            return ProductStatus.OutOfStock
+        return ProductStatus(raw_product_status)
 
     @property
     def available_date(self) -> datetime.date | None:
