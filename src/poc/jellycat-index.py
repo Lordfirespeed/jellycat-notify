@@ -52,10 +52,12 @@ class Jellycat:
     @property
     def available_date(self) -> datetime.date | None:
         if self.badge_title is None: return None
-        if self.badge_title.startswith("Available in"): return None
         if not self.badge_title.startswith("Available "): return None
         available_date_string = self.badge_title[10:]
-        available_datetime = dateutil.parser.parse(available_date_string)
+        try:
+            available_datetime = dateutil.parser.parse(available_date_string)
+        except dateutil.parser.ParserError:
+            return None
         return available_datetime.date()
 
     def __repr__(self):
