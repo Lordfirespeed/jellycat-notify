@@ -41,7 +41,6 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
     @tasks.loop(minutes=1)
     async def poll(self) -> None:
         await self.check_for_new_jellycat_stock()
-        print(database.unavailable_jellycats)
 
     @poll.before_loop
     async def on_start(self):
