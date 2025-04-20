@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+from asyncio import TaskGroup
 from enum import StrEnum
 from typing import AsyncGenerator
 
@@ -90,8 +91,8 @@ class Jellycat:
         return f"Jellycat(name={self.name!r}, slug={self.slug!r})"
 
 
-async def fetch_page_of_jellycats(session: aiohttp.ClientSession, page_number: int) -> Page[Jellycat]:
-    response = await session.get(jellycat_search_url % { "page": page_number })
+async def fetch_page_of_jellycats(session: aiohttp.ClientSession, query: dict[str, str]) -> Page[Jellycat]:
+    response = await session.get(jellycat_search_url % query)
     body = await response.json()
 
     pagination_meta_raw = body["pagination"]
@@ -115,16 +116,23 @@ async def fetch_all_jellycats(session: aiohttp.ClientSession) -> AsyncGenerator[
     page_cursor = 1
     total_pages = 1
     while page_cursor <= total_pages:
-        current_page = await fetch_page_of_jellycats(session, page_cursor)
+        current_page = await fetch_page_of_jellycats(session, { "page": page_cursor })
         total_pages = current_page.pagination.total_pages
         for item in current_page.items:
             yield item
         page_cursor += 1
 
 
+async def fetch_one_jellycat(session: aiohttp.ClientSession, slug: str) -> Jellycat:
+    page = await fetch_page_of_jellycats(session, { "bgfilter.custom_url": f"/{slug}/" })
+    assert len(page.items) == 1
+    return page.items[0]
+
+
 __all__ = (
     "Jellycat",
     "fetch_all_jellycats",
+    "fetch_one_jellycat",
     "fetch_page_of_jellycats",
 )
 
