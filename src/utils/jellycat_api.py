@@ -1,6 +1,5 @@
 import asyncio
 import datetime
-from asyncio import TaskGroup
 from enum import StrEnum
 from typing import AsyncGenerator
 
@@ -26,6 +25,14 @@ class Jellycat:
 
     def __init__(self, raw: dict[str, object]):
         self._raw = raw
+
+    def __eq__(self, other):
+        if not isinstance(other, Jellycat):
+            return False
+        return self.id == other.id
+
+    def __hash__(self):
+        return hash(self.id)
 
     @property
     def name(self) -> str:
@@ -131,6 +138,7 @@ async def fetch_one_jellycat(session: aiohttp.ClientSession, slug: str) -> Jelly
 
 __all__ = (
     "Jellycat",
+    "ProductStatus",
     "fetch_all_jellycats",
     "fetch_one_jellycat",
     "fetch_page_of_jellycats",
