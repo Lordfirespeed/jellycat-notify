@@ -10,7 +10,7 @@ from utils.jellycat_api import fetch_all_jellycats, ProductStatus, Jellycat, fet
 
 
 class JellycatPoller(commands.Cog, name="Jellycat Poller"):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     async def cog_load(self) -> None:
@@ -20,9 +20,16 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
         self.poll.cancel()
 
     async def notify_jellycat_in_stock(self, jellycat: Jellycat) -> None:
-        async with asyncio.TaskGroup as task_group:
-            for subscriber in database.subscribers:
-                task_group.create_task(subscriber.send(content=f"Jellycat stock alert - [{jellycat.name}]({jellycat.url}) is available for purchase!"))
+        notification_body = f"Jellycat stock alert - [{jellycat.name}]({jellycat.url}) is available for purchase!"
+
+        async def deliver_notification(subscriber_user_id: int) -> None:
+            nonlocal notification_body
+            user = self.bot.get_user(subscriber_user_id) or await self.bot.fetch_user(subscriber_user_id)
+            await user.send(content=notification_body)
+
+        async with asyncio.TaskGroup() as task_group:
+            for subscriber_user_id in database.subscriber_user_ids:
+                task_group.create_task(deliver_notification(subscriber_user_id))
 
     async def check_for_new_jellycat_stock(self) -> None:
         async with AsyncExitStack() as stack:
@@ -30,12 +37,12 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
             task_group: asyncio.TaskGroup = await stack.enter_async_context(asyncio.TaskGroup())
 
             async for jellycat in fetch_all_jellycats(session):
-                if jellycat in database.unavailable_jellycats and jellycat.product_status == ProductStatus.Live and jellycat.in_stock:
-                    database.unavailable_jellycats.discard(jellycat)
+                if jellycat.uid in database.unavailable_jellycat_uids and jellycat.product_status == ProductStatus.Live and jellycat.in_stock:
+                    database.unavailable_jellycat_uids.discard(jellycat.uid)
                     task_group.create_task(self.notify_jellycat_in_stock(jellycat))
 
                 if jellycat.in_stock == False or jellycat.product_status != ProductStatus.Live:
-                    database.unavailable_jellycats.add(jellycat)
+                    database.unavailable_jellycat_uids.add(jellycat.uid)
                     continue
 
     @tasks.loop(minutes=1)

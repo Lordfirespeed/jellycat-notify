@@ -1,8 +1,4 @@
-from discord import User
+subscriber_user_ids: set[int] = set()
+unavailable_jellycat_uids: set[int] = set()
 
-from utils.jellycat_api import Jellycat
-
-subscribers: set[User] = set()
-unavailable_jellycats: set[Jellycat] = set()
-
-__all__ = ("subscribers", "unavailable_jellycats",)
+__all__ = ("subscriber_user_ids", "unavailable_jellycat_uids",)
