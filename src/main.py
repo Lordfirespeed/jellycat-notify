@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 
 import config
+from cogs.poller import JellycatPoller
 from cogs.subscription_commands import SubscriptionCommands
 from cogs.ping_command import PingCommand
 from utils.async_interrupt import create_interrupt_future
@@ -14,6 +15,7 @@ class MyClient(commands.Bot):
     cog_types: ClassVar[list[Type[commands.Cog]]] = [
         PingCommand,
         SubscriptionCommands,
+        JellycatPoller,
     ]
 
     def __init__(self, *args, **kwargs):
