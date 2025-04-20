@@ -19,7 +19,7 @@ class SubscriptionCommands(commands.Cog, name="Subscribe Commands"):
             The interaction object.
         """
         response: InteractionResponse = interaction.response
-        if interaction.user in database.subscriber_user_ids:
+        if interaction.user.id in database.subscriber_user_ids:
             await response.send_message(content="You are already subscribed :heart:")
             return
         database.subscriber_user_ids.add(interaction.user.id)
@@ -33,7 +33,7 @@ class SubscriptionCommands(commands.Cog, name="Subscribe Commands"):
         :return:
         """
         response: InteractionResponse = interaction.response
-        if not interaction.user in database.subscriber_user_ids:
+        if not interaction.user.id in database.subscriber_user_ids:
             await response.send_message(content="You aren't subscribed :confused:")
             return
         database.subscriber_user_ids.discard(interaction.user.id)
