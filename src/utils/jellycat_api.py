@@ -29,10 +29,10 @@ class Jellycat:
     def __eq__(self, other):
         if not isinstance(other, Jellycat):
             return False
-        return self.id == other.id
+        return self.uid == other.uid
 
     def __hash__(self):
-        return hash(self.id)
+        return hash(self.uid)
 
     @property
     def name(self) -> str:
