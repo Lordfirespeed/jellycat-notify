@@ -21,7 +21,7 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
     async def notify_jellycats_in_stock(self, jellycats: list[Jellycat]) -> None:
         notification_body_lines = [
             f"Jellycat stock alert! These fellas are available for purchase:",
-            *(f" - [{jellycat.name}]({jellycat.url})" for jellycat in jellycats),
+            *(f"- [{jellycat.name}]({jellycat.url})" for jellycat in jellycats),
         ]
         notification_body = "\n".join(notification_body_lines)
 
