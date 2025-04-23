@@ -75,7 +75,7 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
 
         await self.notify_jellycats_in_stock(jellycats_newly_in_stock)
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(hours=1)
     async def poll(self) -> None:
         await self.check_for_new_jellycat_stock()
 
