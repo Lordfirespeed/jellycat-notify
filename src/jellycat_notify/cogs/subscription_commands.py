@@ -2,7 +2,7 @@ import discord
 from discord import app_commands, InteractionResponse
 from discord.ext import commands
 
-import database
+from jellycat_notify.tables import Subscriber
 
 
 class SubscriptionCommands(commands.Cog, name="Subscribe Commands"):

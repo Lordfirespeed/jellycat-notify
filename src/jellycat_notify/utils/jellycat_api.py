@@ -7,7 +7,7 @@ import aiohttp
 import dateutil.parser
 from yarl import URL
 
-from utils.page import Page, PageMeta
+from jellycat_notify.utils.page import Page, PageMeta
 
 
 jellycat_site_url = URL("https://jellycat.com/shop-all")

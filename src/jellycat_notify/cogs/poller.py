@@ -4,9 +4,8 @@ import aiohttp
 from contextlib import AsyncExitStack
 from discord.ext import commands, tasks
 
-import database
-
-from utils.jellycat_api import fetch_all_jellycats, ProductStatus, Jellycat, fetch_one_jellycat
+from jellycat_notify.tables import Subscriber, JellycatRecord
+from jellycat_notify.utils.jellycat_api import fetch_all_jellycats, ProductStatus, Jellycat
 
 
 class JellycatPoller(commands.Cog, name="Jellycat Poller"):

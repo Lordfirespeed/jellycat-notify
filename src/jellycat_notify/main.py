@@ -4,11 +4,12 @@ from typing import ClassVar, Type
 import discord
 from discord.ext import commands
 
-import config
-from cogs.poller import JellycatPoller
-from cogs.subscription_commands import SubscriptionCommands
-from cogs.ping_command import PingCommand
-from utils.async_interrupt import create_interrupt_future
+from jellycat_notify import config
+
+from jellycat_notify.cogs.poller import JellycatPoller
+from jellycat_notify.cogs.subscription_commands import SubscriptionCommands
+from jellycat_notify.cogs.ping_command import PingCommand
+from jellycat_notify.utils.async_interrupt import create_interrupt_future
 
 
 class MyClient(commands.Bot):
