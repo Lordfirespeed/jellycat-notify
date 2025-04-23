@@ -1,5 +1,6 @@
 from piccolo.table import Table
 from piccolo.columns import Integer, Boolean, Timestamp
+from piccolo.columns.defaults.timestamp import TimestampNow
 
 
 class Subscriber(Table):
@@ -10,7 +11,7 @@ class Subscriber(Table):
 class JellycatRecord(Table):
     jellycat_uid = Integer(index=True)
     is_available = Boolean()
-    timestamp = Timestamp(index=True)
+    timestamp = Timestamp(index=True, default=TimestampNow())
 
 
 __all__ = (
