@@ -19,3 +19,5 @@ dev = [
 [tool.uv]
 
 [tool.poe.tasks]
+new-migration = "piccolo migrations new jellycat_notify"
+migrate = "piccolo migrations forwards jellycat_notify"
