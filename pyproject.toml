@@ -9,3 +9,12 @@ dependencies = [
     "python-dateutil>=2.9.0.post0",
     "python-dotenv>=1.1.0",
 ]
+
+[dependency-groups]
+dev = [
+    "poethepoet>=0.34.0",
+]
+
+[tool.uv]
+
+[tool.poe.tasks]
