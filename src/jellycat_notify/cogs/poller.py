@@ -5,7 +5,7 @@ from contextlib import AsyncExitStack
 from discord.ext import commands, tasks
 
 from jellycat_notify.tables import Subscriber, JellycatRecord
-from jellycat_notify.utils.jellycat_api import fetch_all_jellycats, ProductStatus, Jellycat
+from jellycat_notify.utils.jellycat_api import fetch_all_jellycats, Jellycat
 
 
 class JellycatPoller(commands.Cog, name="Jellycat Poller"):
