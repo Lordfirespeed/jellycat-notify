@@ -23,6 +23,9 @@
 ## App configuration templates
 !.env.template
 
+## Piccolo ORM
+!/piccolo_conf.py
+
 ## Sources
 !/assets
 !/src
