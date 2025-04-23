@@ -1,3 +1,5 @@
+import sqlite3
+
 import discord
 from discord import app_commands, InteractionResponse
 from discord.ext import commands
@@ -19,10 +21,15 @@ class SubscriptionCommands(commands.Cog, name="Subscribe Commands"):
             The interaction object.
         """
         response: InteractionResponse = interaction.response
-        if interaction.user.id in database.subscriber_user_ids:
-            await response.send_message(content="You are already subscribed :heart:")
-            return
-        database.subscriber_user_ids.add(interaction.user.id)
+
+        try:
+            await Subscriber.insert(
+                Subscriber(discord_user_id=interaction.user.id),
+            )
+        except sqlite3.IntegrityError as e:
+            if e.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_PRIMARYKEY:
+                await response.send_message(content="You are already subscribed :heart:")
+            raise
         await response.send_message(content="you have subscribed! :heart:")
 
     @app_commands.command(name="unsubscribe")
@@ -33,10 +40,15 @@ class SubscriptionCommands(commands.Cog, name="Subscribe Commands"):
         :return:
         """
         response: InteractionResponse = interaction.response
-        if not interaction.user.id in database.subscriber_user_ids:
+
+        deleted = await Subscriber.delete() \
+            .where(Subscriber.discord_user_id == interaction.user.id) \
+            .returning(Subscriber.discord_user_id)
+
+        if len(deleted) == 0:
             await response.send_message(content="You aren't subscribed :confused:")
             return
-        database.subscriber_user_ids.discard(interaction.user.id)
+
         await response.send_message(content="you have unsubscribed :broken_heart:")
 
 
