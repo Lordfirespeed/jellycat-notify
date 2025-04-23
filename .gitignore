@@ -1,5 +1,7 @@
 # Exclude everything
 /*
+!/data
+/data/*
 
 # Include specifically
 
@@ -14,6 +16,9 @@
 !.gitignore
 !.gitattributes
 !.git-blame-ignore-revs
+
+## De-facto Git files
+!.gitkeep
 
 ## Package manager
 !pyproject.toml
