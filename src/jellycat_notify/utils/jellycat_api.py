@@ -94,6 +94,10 @@ class Jellycat:
             return None
         return available_datetime.date()
 
+    @property
+    def is_available(self):
+        return self.product_status == ProductStatus.Live and self.in_stock
+
     def __repr__(self):
         return f"Jellycat(name={self.name!r}, slug={self.slug!r})"
 
