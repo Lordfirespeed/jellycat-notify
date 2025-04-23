@@ -20,7 +20,8 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
 
     async def notify_jellycats_in_stock(self, jellycats: list[Jellycat]) -> None:
         notification_body_lines = [
-            f"Jellycat stock alert! These fellas are available for purchase:",
+            "# Stock alert!",
+            "These fellas are available for purchase:",
             *(f"- [{jellycat.name}]({jellycat.url})" for jellycat in jellycats),
         ]
         notification_body = "\n".join(notification_body_lines)
@@ -75,7 +76,7 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
 
         await self.notify_jellycats_in_stock(jellycats_newly_in_stock)
 
-    @tasks.loop(hours=1)
+    @tasks.loop(minutes=1)
     async def poll(self) -> None:
         await self.check_for_new_jellycat_stock()
 
