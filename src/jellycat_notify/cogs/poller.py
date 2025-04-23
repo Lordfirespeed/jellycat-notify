@@ -64,7 +64,7 @@ class JellycatPoller(commands.Cog, name="Jellycat Poller"):
                     continue
                 most_recent_record = most_recent_records[0]
 
-                if most_recent_record.is_available == False and jellycat.is_available:
+                if (most_recent_record.is_available == False) and jellycat.is_available:
                     jellycats_newly_in_stock.append(jellycat)
 
                 if most_recent_record.is_available != jellycat.is_available:
